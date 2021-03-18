@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Kontrol panel</title>
+</head>
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand mr-3" href="#">Kontrol</a>
+        {#        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">#}
+        {#            <span class="navbar-toggler-icon"></span>#}
+        {#        </button>#}
+        {#        <div class="collapse navbar-collapse" id="navbarCollapse">#}
+        {#            <div class="navbar-nav ml-auto">#}
+        {#                <a class="nav-item nav-link ">{{ session.name }}</a>#}
+        {#            </div>#}
+        {#        </div>#}
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+            {#            <div class="container-fluid">#}
+            {#                <div class="row">#}
+            {#                    <div class="col mb-3">#}
+            {#                        <div class="card">#}
+            {#                            <h5 class="card-header">#}
+            {#                                Session info#}
+            {#                            </h5>#}
+            {#                            <div class="card-body">#}
+            {#                                <p class="card-text"><strong>Created:</strong> {{ session.create_date }}</p>#}
+            {#                                <p class="card-text"><strong>Updated:</strong> {{ session.update_date }}</p>#}
+            {#                                <p class="card-text"><strong>Status:</strong>#}
+            {#                                    {% if session.status == session.Status.STATUS_NOT_STARTED %}#}
+            {#                                        Not started#}
+            {#                                    {% else %}#}
+            {#                                        {% if session.status == session.Status.STATUS_RUNNING %}#}
+            {#                                            Running#}
+            {#                                        {% else %}#}
+            {#                                            {% if session.status == session.Status.STATUS_DONE %}#}
+            {#                                                Done#}
+            {#                                            {% else %}#}
+            {#                                            {% endif %}#}
+            {#                                        {% endif %}#}
+            {#                                    {% endif %}#}
+            {#                                </p>#}
+            {#                                <p class="card-text"><strong>Progress:</strong></p>#}
+            {#                                <div class="progress">#}
+            {#                                    <div class="progress-bar" role="progressbar"#}
+            {#                                         style="width: {{ session.progress_percent }}%;"#}
+            {#                                         aria-valuenow="{{ session.progress_percent }}"#}
+            {#                                         aria-valuemin="0" aria-valuemax="100">{{ session.progress_percent }}%#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                                <p class="card-text text-right">#}
+            {#                                    ~ {{ session.time_left }} left#}
+            {#                                </p>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
+        </div>
+        <div class="col-lg-8">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Active sessions</h4>
+                                <h5 class="card-subtitle mb-2 text-muted">Updated less that 2h ago</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% if active_sessions.count == 0 %}
+                                    <li class="list-group-item">
+                                        <p class="text-muted">No such sessions</p>
+                                    </li>
+                                {% else %}
+                                    {% for session in active_sessions %}
+                                        <li class="list-group-item">
+                                            <a href="{% url 'kontrol_panel:session_detail' session.id %}">
+                                                <h7><strong>{{ session.name }}</strong></h7>
+                                                <p class="text-muted">Last updated: {{ session.update_date }}</p>
+                                                <p class="text-muted">Time left: ~{{ session.time_left }}</p>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Finished sessions</h4>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% if done_sessions.count == 0 %}
+                                    <li class="list-group-item">
+                                        <p class="text-muted">No such sessions</p>
+                                    </li>
+                                {% else %}
+                                    {% for session in done_sessions %}
+                                        <li class="list-group-item">
+                                            <a href="{% url 'kontrol_panel:session_detail' session.id %}">
+                                                <h7><strong>{{ session.name }}</strong></h7>
+                                                <p class="text-muted">Last updated: {{ session.update_date }}</p>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
